@@ -7,13 +7,14 @@ Page({
     userInfo: {},
     logged: false,
     takeSession: false,
-    requestResult: ''
+    requestResult: '',
+    imgUrl:''
   },
 
   onLoad: function() {
     if (!wx.cloud) {
       wx.redirectTo({
-        url: '../chooseLib/chooseLib',
+        url: '../chooseLib/chooseLifb',
       })
       return
     }
@@ -69,6 +70,7 @@ Page({
 
   // 上传图片
   doUpload: function () {
+    var that = this
     // 选择图片
     wx.chooseImage({
       count: 1,
@@ -88,15 +90,20 @@ Page({
           cloudPath,
           filePath,
           success: res => {
-            console.log('[上传文件] 成功：', res)
+            // console.log('[上传文件] 成功：', res)
 
-            app.globalData.fileID = res.fileID
-            app.globalData.cloudPath = cloudPath
-            app.globalData.imagePath = filePath
-            
-            wx.navigateTo({
-              url: '../storageConsole/storageConsole'
+            // app.globalData.fileID = res.fileID
+            // app.globalData.cloudPath = cloudPath
+            // app.globalData.imagePath = filePath
+            console.log('imgUrl01', res.fileID)
+
+            that.setData({
+              imgUrl: res.fileID
             })
+            console.log('imgUrl02', res.fileID)
+            // wx.navigateTo({
+            //   url: '../storageConsole/storageConsole'
+            // })
           },
           fail: e => {
             console.error('[上传文件] 失败：', e)
