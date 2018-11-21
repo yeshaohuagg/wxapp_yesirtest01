@@ -8,13 +8,15 @@ Page({
     logged: false,
     takeSession: false,
     requestResult: '',
-    imgUrl:''
+    imgUrl:'',
+    username:''
   },
 
   onLoad: function() {
     if (!wx.cloud) {
       wx.redirectTo({
         url: '../chooseLib/chooseLifb',
+        
       })
       return
     }
@@ -28,7 +30,8 @@ Page({
             success: res => {
               this.setData({
                 avatarUrl: res.userInfo.avatarUrl,
-                userInfo: res.userInfo
+                userInfo: res.userInfo,
+                username: res.userInfo.nickName
               })
             }
           })
@@ -42,7 +45,8 @@ Page({
       this.setData({
         logged: true,
         avatarUrl: e.detail.userInfo.avatarUrl,
-        userInfo: e.detail.userInfo
+        userInfo: e.detail.userInfo,
+        username: e.detail.userInfo.nickName
       })
     }
   },
@@ -70,7 +74,7 @@ Page({
 
   // 上传图片
   doUpload: function () {
-    var that = this
+    var that = this//要在这
     // 选择图片
     wx.chooseImage({
       count: 1,
@@ -85,7 +89,8 @@ Page({
         const filePath = res.tempFilePaths[0]
         
         // 上传图片
-        const cloudPath = 'my-image' + filePath.match(/\.[^.]+?$/)[0]
+        var timestamp = Date.parse(new Date())/1000;
+        const cloudPath = 'myImage_' + timestamp + filePath.match(/\.[^.]+?$/)[0]
         wx.cloud.uploadFile({
           cloudPath,
           filePath,
@@ -96,7 +101,7 @@ Page({
             // app.globalData.cloudPath = cloudPath
             // app.globalData.imagePath = filePath
             console.log('imgUrl01', res.fileID)
-
+            that.add()
             that.setData({
               imgUrl: res.fileID
             })
@@ -123,5 +128,25 @@ Page({
       }
     })
   },
+  previewImage: function (e) {
+    wx.previewImage({
+      urls: [this.data.imgUrl] // 需要预览的图片http链接列表
+    })
+  },
 
+  add:function(){
+    wx.cloud.callFunction({
+      name: 'add',
+      data: {
+        a:1,
+        b:2,
+      },
+      success:function(response){
+        console.log(response.result.sum)
+      },
+      fail:console.fail
+    })
+  }
+
+  
 })

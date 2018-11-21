@@ -2,15 +2,15 @@
 <view class="container">
 
   <!-- 用户 openid -->
-  <view class="userinfo">
+  <view class="userinfo" bindtap="onGetOpenid">
     <button 
       open-type="getUserInfo" 
       bindgetuserinfo="onGetUserInfo"
       class="userinfo-avatar"
       style="background-image: url({{avatarUrl}})"
     ></button>
-    <view>
-      <button class="userinfo-nickname" bindtap="onGetOpenid">点击查看id</button>
+    <view class="userinfo-nickname" >
+      <text>{{username}}</text>
     </view>
   </view>
 
@@ -18,9 +18,13 @@
   <!-- 上传图片 -->
   <view class="uploader">
     <view class="uploader-text" bindtap="doUpload">
-      <text>上传图片到后台服务器</text>
+      <text>点击发一张美美的照片看看</text>
     </view>
-    <image class="uploader-image" mode='aspectFit' src="{{imgUrl}}"/>
+    <view class="uploader-image-container" bindtap="doUpload">
+      <image class="uploader-image" mode='aspectFit' src="{{imgUrl}}" bindtap='previewImage' flex:1/>
+    </view>
+    
+    <video class="video" src="http://vfx.mtime.cn/Video/2018/10/09/mp4/181009153307111224.mp4"></video>
   </view>
 
 
